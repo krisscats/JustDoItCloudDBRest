@@ -7,12 +7,34 @@ import teccr.justdoitcloud.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-/**
- * Service responsible for user-related business logic.
+/*  Service responsible for user-related business logic.
  */
 @Service
 public class UserService {
+    /*
+      Recupera un usuario a partir de su username.
+     Lanza una excepción 404 si no se encuentra.
+      
+      @param username el nombre de usuario a buscar
+      @return el User encontrado
 
+FUNCIONALIDAD 1: busqueda de usuario por nombre de usuario (username).
+por que se hace aqui? Porque la capa de servicio centraliza la regla de negocio:
+valida que el texto no esté vacío y lanza un error 404 (Not Found) si el 
+usuario no se encuentra registrado en la base de datos, evitando traer toda la lista.
+     */
+     */
+    public User getUserByUserName(String username) {
+        if (username == null || username.trim().isEmpty()) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                org.springframework.http.HttpStatus.NOT_FOUND, "Username cannot be empty"
+            );
+        }
+        return userRepository.findByUserName(username.trim())
+            .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(
+                org.springframework.http.HttpStatus.NOT_FOUND, "User not found with username: " + username
+            ));
+    }
     private final UserRepository userRepository;
 
     // Constructor injection of UserRepository
