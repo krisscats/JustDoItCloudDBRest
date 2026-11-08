@@ -49,10 +49,10 @@ public class JdbcUserRepository implements UserRepository {
                 .findFirst();
     }
 
-    @Override
+@Override
     public Optional<User> findByUserName(String userName) {
-        return jdbcTemplate.query("SELECT " + SELECT_COLUMNS + " FROM users WHERE user_name = ?",
-                        USER_ROW_MAPPER, userName)
+        String sql = "SELECT " + SELECT_COLUMNS + " FROM users WHERE TRIM(user_name) = TRIM(?)";
+        return jdbcTemplate.query(sql, USER_ROW_MAPPER, userName)
                 .stream()
                 .findFirst();
     }

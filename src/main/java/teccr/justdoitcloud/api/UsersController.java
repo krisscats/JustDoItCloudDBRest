@@ -23,10 +23,25 @@ public class UsersController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{id}")
+
+
+    /* FUNCIONALIDAD 1: Endpoint REST para el login optimizado por username.
+      se hace modificacion aqui porque el controlador actúa como la interfaz HTTP 
+      que expone la ruta exacta solicitada (GET /api/v1/users/byusername/{username}),
+      permitiendo que el Frontend consulte únicamente al usuario digitado en lugar 
+     de descargar la lista completa de usuarios.
+     */
+    @GetMapping("/byusername/{username}")
+    public ResponseEntity<User> getUserByUserName(@PathVariable String username) {
+        User user = userService.getUserByUserName(username);
+        return ResponseEntity.ok(user);
+    }
+
+        @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> userOpt = userService.getUserById(id);
         return userOpt.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 
     @PostMapping
